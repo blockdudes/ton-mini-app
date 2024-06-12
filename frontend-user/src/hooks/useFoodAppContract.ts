@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Array_Restaurant, TonFoodMiniApp } from '../contracts/TonFoodMiniApp';
-import { useTonClient } from './useTonClient';
-import { useAsyncInitialize } from './useAsyncInitialize';
-import { Address, OpenedContract } from '@ton/core';
+import { useEffect, useState } from "react";
+import {
+  Array_Restaurant,
+  TonFoodMiniApp,
+} from "../contracts/tact_TonFoodMiniApp";
+import { useTonClient } from "./useTonClient";
+import { useAsyncInitialize } from "./useAsyncInitialize";
+import { Address, OpenedContract } from "@ton/core";
 
 export function useFoodMiniAppContract() {
   const client = useTonClient();
@@ -11,9 +14,12 @@ export function useFoodMiniAppContract() {
   const foodMiniAppContract = useAsyncInitialize(async () => {
     if (!client) return;
     const contract = TonFoodMiniApp.fromAddress(
-        Address.parse('EQDX2jHZHf5lsObHkcxyRiZ9RGmVnuzmKwkCTWxLroUvoHw6')
-    )
-    return client.open(contract) as OpenedContract<TonFoodMiniApp>;
+      Address.parse("EQD70c_q04lsCxbxnPxldtv46zdqBjo4V4GxG1LPvotkjyh5")
+    );
+    const openedContract = client.open(
+      contract
+    ) as OpenedContract<TonFoodMiniApp>;
+    return openedContract;
   }, [client]);
 
   // useEffect(() => {
@@ -28,6 +34,5 @@ export function useFoodMiniAppContract() {
 
   return {
     foodMiniAppContract,
-    
   };
 }

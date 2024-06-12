@@ -1,40 +1,73 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import MenuItemsCard from "../components/resturantMenuPageComp/MenuItemsCard";
 import { IoArrowBackCircle } from "react-icons/io5";
+import { useTonWallet } from "@tonconnect/ui-react";
+import { useTonConnect } from "../hooks/useTonConnect";
+import { Restaurant } from "../contracts/tact_TonFoodMiniApp";
+import { useFoodMiniAppContract } from "../hooks/useFoodAppContract";
+import { Address } from "@ton/core";
+import { useLocation } from "react-router-dom";
 
 const ResturantMenuPage = () => {
+  const { state } = useLocation();
+  const [restaurant, setRestaurant] = useState<Restaurant>();
+  const resturantId = window.location.pathname.split("/menu/")[1];
+  const wallet = useTonWallet();
+  const { sender } = useTonConnect();
+
+  const { foodMiniAppContract } = useFoodMiniAppContract();
+  console.log(foodMiniAppContract);
+
+  useEffect(() => {
+    async function getRestaurants() {
+      if (!foodMiniAppContract) return;
+      const _restaurant = await foodMiniAppContract.getRestaurantById(
+        Address.parse(resturantId)
+      );
+      setRestaurant(_restaurant.Map.values()[0]);
+    }
+    getRestaurants();
+  }, [foodMiniAppContract]);
+
+  if (restaurant === undefined)
+    return (
+      <div className="h-screen w-screen flex justify-center items-center text-xl">
+        Loading...
+      </div>
+    );
+
   return (
-    <div className="flex flex-col pt-2">
-      {/* resturant info */}
+    <div className="w-full flex flex-col pt-2">
       <div className="h-[30%] items-center flex flex-col">
         <div className="w-20 h-20 sm:w-24 sm:h-24  rounded-full border-4 ">
           <img
-            src="https://images.pexels.com/photos/9195090/pexels-photo-9195090.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            src={restaurant.imageUrl}
             alt="logo"
             className="w-full h-full object-cover rounded-full"
           />
         </div>
-        <h1 className="text-primary  font-caveat font-bold sm:text-lg">KFC</h1>
+        <h1 className="text-primary font-caveat font-bold sm:text-lg">KFC</h1>
         <h1 className="text-primary font-caveat font-bold sm:text-lg">
-          D-77-A, Cannaught Place,New Delhi
+          {restaurant.vendorDetails.location}
         </h1>
         <h1 className="text-secondary  font-bold sm:text-lg">
-          *** Delight in every bite ***
+          {restaurant.description}
         </h1>
       </div>
-      {/* menu */}
-      <div className="h-[70%] flex   flex-col gap-3 mt-12 p-2">
+      <div className="h-[70%] w-full flex flex-col gap-3 mt-12 p-2">
         <div className="flex items-center gap-2">
-          <IoArrowBackCircle
-            size={26}
-            onClick={() => window.history.back()}
-            className="cursor-pointer"
-          />
+          {state === true && (
+            <IoArrowBackCircle
+              size={26}
+              onClick={() => window.history.back()}
+              className="cursor-pointer"
+            />
+          )}
           <h1 className="text-primary text-xl font-bold">Explore our menu</h1>
         </div>
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5  gap-3">
-          {[1, 2, 3, 4, 5, 6, 7].map((item, index) => (
-            <MenuItemsCard key={index} />
+        <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          {restaurant.menu.Map.values().map((item, index) => (
+            <MenuItemsCard key={index} menuItem={item} />
           ))}
         </div>
       </div>

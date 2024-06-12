@@ -29,7 +29,7 @@ const CartPage = () => {
               </div>
             </div>
             <div>
-              <h1 className="text-primary font-bold">₹200</h1>
+              <h1 className="text-primary font-bold">200 ton</h1>
             </div>
           </div>
         ))}

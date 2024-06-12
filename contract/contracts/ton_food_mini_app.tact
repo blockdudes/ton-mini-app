@@ -309,7 +309,7 @@ contract TonFoodMiniApp with Deployable {
         }
         return _orders;
     }
-
+    
     get fun inQueueOrders(restaurantId: Address): Array_Order {
         return self.getOrderByStatus(restaurantId, self.Status_InQueue);
     }
@@ -344,7 +344,16 @@ contract TonFoodMiniApp with Deployable {
         return _restaurants;
     }
 
+    get fun restaurantById(restaurantId: Address): Array_Restaurant {
+        let restaurant: map<Address, Restaurant> = self.restaurant;
+        require(restaurant.get(restaurantId) != null, "Restaurant does not exist");
+        let _restaurants: Array_Restaurant = emptyArray_Restaurant();
+        _restaurants.append(restaurant.get(restaurantId)!!);
+        return _restaurants;
+    }
+
     get fun isVendorPresent(): Bool {
-        return self.restaurant.get(sender()) != null;
+        let restaurant: map<Address, Restaurant> = self.restaurant;
+        return restaurant.get(sender()) != null;
     }
 }

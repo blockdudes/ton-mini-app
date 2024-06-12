@@ -13,6 +13,7 @@ import ResturantMenuPage from "./pages/ResturantMenuPage";
 import { FaCartArrowDown } from "react-icons/fa6";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import { useMemo } from "react";
+import { Badge } from "@material-tailwind/react";
 
 function App() {
   const manifestUrl = useMemo(() => {
@@ -26,16 +27,26 @@ function App() {
       manifestUrl={manifestUrl}
       actionsConfiguration={{
         twaReturnUrl:
-          "https://755e-2401-4900-1cd6-75f3-852a-ff01-cc34-f5a1.ngrok-free.app",
+          "https://402f-2401-4900-1cd6-75f3-fcb5-6d22-6154-84cc.ngrok-free.app",
       }}
     >
       <BrowserRouter>
-        <div className="bg-tertiary px-2  min-h-screen">
-          <Link to="/cart">
-            <div className="w-12 bg-primary h-12 rounded-full fixed bottom-2 right-2 border-4 flex justify-center items-center">
-              <FaCartArrowDown color="white" />
-            </div>
-          </Link>
+        <div className="bg-tertiary px-2 min-h-screen">
+          <div className="fixed bottom-2 right-2">
+            <Badge
+              overlap="circular"
+              className="m-[1px]"
+              color="orange"
+              content={10}
+            >
+              <Link
+                className="w-12 h-12 bg-primary rounded-full border-4 flex justify-center items-center"
+                to="/cart"
+              >
+                <FaCartArrowDown color="white" />
+              </Link>
+            </Badge>
+          </div>
 
           <Routes>
             <Route path="/" element={<HomePage />} />

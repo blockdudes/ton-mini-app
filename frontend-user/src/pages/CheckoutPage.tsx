@@ -33,15 +33,15 @@ const CheckoutPage = () => {
           <h1>
             Hot Dog <span>x 1</span>
           </h1>
-          <h1>₹200</h1>
+          <h1>200 ton</h1>
         </div>
         <div className="flex  font-bold justify-between">
           <h1>Free Delivery</h1>
-          <h1>₹0</h1>
+          <h1>0 ton</h1>
         </div>
         <div className="flex  font-bold justify-between">
           <h1>Total</h1>
-          <h1>₹0</h1>
+          <h1>0 ton</h1>
         </div>
       </div>
       <div className=" p-2 rounded-md border-4">
