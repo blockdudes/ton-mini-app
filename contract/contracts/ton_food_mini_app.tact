@@ -2,12 +2,11 @@ import "@stdlib/deploy"; // for Deployable trait
 import "./structs.tact";
 import "./messages.tact";
 
-// refund money when cancelled or rejected
-
 contract TonFoodMiniApp with Deployable {
     const MinTonForStorage: Int = ton("0.02");
     restaurant: map<Address, Restaurant>; // restaurantId -> Restaurant
     orders: map<Address, Array_Order>; // restaurantId -> Order
+    userOrders: map<Address, Array_OrderRefs>; // userAddress -> OrderIds
     const Status_InQueue: Int = 0;
     const Status_Accepted: Int = 1;
     const Status_Delivered: Int = 2;
@@ -101,6 +100,16 @@ contract TonFoodMiniApp with Deployable {
         let updatedOrders: Array_Order = self.orders.get(msg.restaurantId)!!;
         updatedOrders.append(_order);
         self.orders.set(msg.restaurantId, updatedOrders);
+        if(self.userOrders.get(msg.userDetails.walletAddress) == null) {
+            self.userOrders.set(msg.userDetails.walletAddress, emptyArray_OrderRefs());
+        }
+        let updatedUserOrders: Array_OrderRefs = self.userOrders.get(msg.userDetails.walletAddress)!!;
+        let _orderRef: OrderRef = OrderRef{
+            restaurantId: msg.restaurantId,
+            orderId: _order.orderId
+        };
+        updatedUserOrders.append(_orderRef);
+        self.userOrders.set(msg.userDetails.walletAddress, updatedUserOrders);
 
         self.returnGas(sender(), 0);
 
@@ -333,6 +342,18 @@ contract TonFoodMiniApp with Deployable {
     get fun allOrders(restaurantId: Address): Array_Order {
         require(self.restaurant.get(restaurantId) != null, "Restaurant does not exist");
         return self.orders.get(restaurantId)!!;
+    }
+
+    get fun allUserOrders(userId: Address): Array_Order {
+        require(self.userOrders.get(userId) != null, "User does not have any orders");
+        let orderRefs: map<Int as uint16, OrderRef> = self.userOrders.get(userId)!!.Map;
+        let _orders: Array_Order = emptyArray_Order();
+        foreach(key, orderRef in orderRefs){
+            let restaurantId: Address = orderRef.restaurantId;
+            let orders: Array_Order = self.orders.get(restaurantId)!!;
+            _orders.append(orders.Map.get(orderRef.orderId)!!);
+        }
+        return _orders;
     }
 
     get fun allRestaurants(): Array_Restaurant {

@@ -54,7 +54,7 @@ extends mutates fun append(self: Array_ItemIds, item: Int) {
     self.length += 1;
 }
 
-extends fun getIdx(self: Array_ItemIds, idx: Int): Int { 
+extends fun getIdx(self: Array_ItemIds, idx: Int): Int {
     require(self.length > 0, "No items in the array!");
     require(idx >= 0, "Index of the item cannot be negative!");
     require(idx < self.length, "Index is out of array bounds!");
@@ -131,6 +131,28 @@ fun emptyArray_Restaurant(): Array_Restaurant {
     return Array_Restaurant{Map: emptyMap(), length: 0};
 }
 
+struct Array_OrderRefs {
+    Map: map<Int as uint16, OrderRef>;
+    length: Int = 0;
+}
+
+extends mutates fun append(self: Array_OrderRefs, item: OrderRef) {
+    require((self.length + 1) <= MaxArraySize, "No space in the array left for new items!");
+    self.Map.set(self.length, item);
+    self.length += 1;
+}
+
+extends fun getIdx(self: Array_OrderRefs, idx: Int): OrderRef {
+    require(self.length > 0, "No items in the array!");
+    require(idx >= 0, "Index of the item cannot be negative!");
+    require(idx < self.length, "Index is out of array bounds!");
+    return self.Map.get(idx)!!;
+}
+
+fun emptyArray_OrderRefs(): Array_OrderRefs {
+    return Array_OrderRefs{Map: emptyMap(), length: 0};
+}
+
 struct Restaurant {
     restaurantId: Address;
     name: String;
@@ -175,4 +197,8 @@ struct OrderItem {
 }
 struct BillingDetails {
     totalAmount: Int as uint256;
+}
+struct OrderRef{
+    restaurantId: Address;
+    orderId: Int as uint256;
 }
