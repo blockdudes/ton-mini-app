@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import MenuItemsCard from "../components/resturantMenuPageComp/MenuItemsCard";
 import { IoArrowBackCircle } from "react-icons/io5";
-import { useTonWallet } from "@tonconnect/ui-react";
-import { useTonConnect } from "../hooks/useTonConnect";
 import { Restaurant } from "../contracts/tact_TonFoodMiniApp";
 import { useFoodMiniAppContract } from "../hooks/useFoodAppContract";
 import { Address } from "@ton/core";
@@ -12,9 +10,6 @@ const ResturantMenuPage = () => {
   const { state } = useLocation();
   const [restaurant, setRestaurant] = useState<Restaurant>();
   const resturantId = window.location.pathname.split("/menu/")[1];
-  const wallet = useTonWallet();
-  const { sender } = useTonConnect();
-
   const { foodMiniAppContract } = useFoodMiniAppContract();
   console.log(foodMiniAppContract);
 
@@ -67,7 +62,11 @@ const ResturantMenuPage = () => {
         </div>
         <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {restaurant.menu.Map.values().map((item, index) => (
-            <MenuItemsCard key={index} menuItem={item} />
+            <MenuItemsCard
+              key={index}
+              restaurant={restaurant}
+              menuItem={item}
+            />
           ))}
         </div>
       </div>

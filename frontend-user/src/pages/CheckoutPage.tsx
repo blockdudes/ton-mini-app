@@ -1,9 +1,15 @@
-import React from "react";
 import { AccordionCheckout } from "../components/checkoutPageComp/AccordionCheckout";
 import { IoArrowBackCircle } from "react-icons/io5";
-import { ModalComp } from "../components/checkoutPageComp/ModalComp";
+import { useCart } from "../hooks/useCart";
+import { fromNano } from "@ton/core";
+import { useTonConnect } from "../hooks/useTonConnect";
+import { useFoodMiniAppContract } from "../hooks/useFoodAppContract";
 
 const CheckoutPage = () => {
+  const { cart, createOrder } = useCart();
+  const { sender } = useTonConnect();
+  const { foodMiniAppContract } = useFoodMiniAppContract();
+
   return (
     <div className="pt-4 flex flex-col gap-4 px-2">
       <div className="flex items-center gap-2">
@@ -17,35 +23,64 @@ const CheckoutPage = () => {
       <div className=" p-2 rounded-md border-4">
         <div className="flex gap-2">
           <img
-            className="w-30 h-24 rounded-md"
-            src="https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            alt=""
+            className="w-28 aspect-square rounded-md object-cover"
+            src={cart.restaurant.imageUrl}
+            alt="Restaurant Image"
           />
           <div>
-            <h1 className="text-primary font-bold">Order #1234545</h1>
-            <h1 className="text-primary"> Perfect lunch from KFC</h1>
-            <h1 className="text-secondary font-bold">KFC</h1>
+            {/* <h1 className="text-primary font-bold">Order #1234545</h1> */}
+            <h1 className="text-secondary font-bold text-2xl">
+              {cart.restaurant.name}
+            </h1>
+            <h1 className="text-primary text-lg line-clamp-3">
+              {cart.restaurant.description}
+            </h1>
           </div>
         </div>
       </div>
-      <div className=" p-2 rounded-md border-4">
-        <div className="flex  font-bold justify-between">
-          <h1>
-            Hot Dog <span>x 1</span>
-          </h1>
-          <h1>200 ton</h1>
-        </div>
-        <div className="flex  font-bold justify-between">
+      <div className="p-2 rounded-md border-4">
+        {cart.items.map((item, index) => (
+          <div key={index} className="flex font-bold justify-between">
+            <h1>
+              {item.name} <span>x {Number(item.quantity)}</span>
+            </h1>
+            <h1>
+              {(Number(fromNano(item.price)) * Number(item.quantity)).toFixed(
+                2
+              )}{" "}
+              ton
+            </h1>
+          </div>
+        ))}
+        {/* <div className="flex font-bold justify-between">
           <h1>Free Delivery</h1>
           <h1>0 ton</h1>
-        </div>
-        <div className="flex  font-bold justify-between">
+        </div> */}
+        <div className="flex font-bold justify-between">
           <h1>Total</h1>
-          <h1>0 ton</h1>
+          <h1>
+            {Number(
+              fromNano(
+                cart.items.reduce(
+                  (total, item) => total + item.price * item.quantity,
+                  0n
+                )
+              )
+            ).toFixed(2)}{" "}
+            ton
+          </h1>
         </div>
       </div>
-      <div className=" p-2 rounded-md border-4">
+      <div className="p-2 rounded-md border-4">
         <AccordionCheckout />
+      </div>
+      <div>
+        <button
+          className="w-full flex justify-center bg-secondary p-2 text-white font-bold rounded-lg"
+          onClick={() => createOrder(foodMiniAppContract!, sender)}
+        >
+          CREATE ORDER
+        </button>
       </div>
     </div>
   );
