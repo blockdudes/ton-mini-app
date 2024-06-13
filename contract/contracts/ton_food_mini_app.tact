@@ -352,8 +352,8 @@ contract TonFoodMiniApp with Deployable {
         return _restaurants;
     }
 
-    get fun isVendorPresent(): Bool {
+    get fun isVendorPresent(restaurantId: Address): Bool {
         let restaurant: map<Address, Restaurant> = self.restaurant;
-        return restaurant.get(sender()) != null;
+        return restaurant.get(restaurantId) != null;
     }
 }
