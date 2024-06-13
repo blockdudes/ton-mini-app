@@ -1,14 +1,33 @@
 import { AccordionCheckout } from "../components/checkoutPageComp/AccordionCheckout";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { useCart } from "../hooks/useCart";
-import { fromNano } from "@ton/core";
+import { Address, fromNano } from "@ton/core";
 import { useTonConnect } from "../hooks/useTonConnect";
 import { useFoodMiniAppContract } from "../hooks/useFoodAppContract";
+import { useEffect } from "react";
+import { useTonWallet } from "@tonconnect/ui-react";
 
 const CheckoutPage = () => {
-  const { cart, createOrder } = useCart();
+  const { cart, createOrder, setUserInfo } = useCart();
   const { sender } = useTonConnect();
   const { foodMiniAppContract } = useFoodMiniAppContract();
+  const wallet = useTonWallet();
+
+  useEffect(() => {
+    if (!wallet) return;
+    let userData = cart.userDetails;
+    if (userData.name == "") {
+      setUserInfo({
+        $$type: "User",
+        name: "John Doe",
+        location: "123, Street, City",
+        phoneNumber: "1234567890",
+        walletAddress: Address.parse(wallet.account.address),
+      });
+    }
+    console.log(userData);
+    console.log(userData?.walletAddress.toString());
+  }, [wallet]);
 
   return (
     <div className="pt-4 flex flex-col gap-4 px-2">

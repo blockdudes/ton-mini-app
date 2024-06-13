@@ -46,7 +46,7 @@ const App = () => {
       manifestUrl={manifestUrl}
       actionsConfiguration={{
         twaReturnUrl:
-          "https://402f-2401-4900-1cd6-75f3-fcb5-6d22-6154-84cc.ngrok-free.app",
+          "https://a164-2401-4900-1cd6-75f3-4c7d-2a8f-1ab2-c285.ngrok-free.app",
       }}
     >
       <CartProvider>

@@ -1,5 +1,5 @@
 import React, { ReactNode, createContext, useContext, useState } from "react";
-import { Address, Dictionary, OpenedContract, Sender, toNano } from "@ton/core";
+import { Address, Dictionary, OpenedContract, Sender } from "@ton/core";
 import {
   CreateOrder,
   MenuItem,
@@ -139,6 +139,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       number,
       OrderItem
     >();
+    cart.items.forEach((item, index) => {
+      orderItems.set(index, {
+        $$type: "OrderItem",
+        id: item.id,
+        quantity: item.quantity,
+      });
+    });
     const order: CreateOrder = {
       $$type: "CreateOrder",
       restaurantId: cart.restaurant.restaurantId,
@@ -160,12 +167,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       },
       category: cart.category,
     };
-    console.log(JSON.stringify(order));
+    console.log(order);
 
     await foodMiniAppContract.send(
       sender,
       {
-        value: toNano(0.5),
+        value: totalPrice,
       },
       order
     );
