@@ -11,7 +11,6 @@ const ResturantMenuPage = () => {
   const [restaurant, setRestaurant] = useState<Restaurant>();
   const resturantId = window.location.pathname.split("/menu/")[1];
   const { foodMiniAppContract } = useFoodMiniAppContract();
-  console.log(foodMiniAppContract);
 
   useEffect(() => {
     async function getRestaurants() {
@@ -26,30 +25,32 @@ const ResturantMenuPage = () => {
 
   if (restaurant === undefined)
     return (
-      <div className="h-screen w-screen flex justify-center items-center text-xl">
+      <div className="h-screen w-screen flex justify-center items-center text-xl text-primary">
         Loading...
       </div>
     );
 
   return (
-    <div className="w-full flex flex-col pt-2">
-      <div className="h-[30%] items-center flex flex-col">
-        <div className="w-20 h-20 sm:w-24 sm:h-24  rounded-full border-4 ">
+    <div className="h-screen w-full flex flex-col pt-2 overflow-scroll">
+      <div className="max-h-64 items-center flex flex-col">
+        <div className="min-h-10 max-h-28 sm:max-h-16 aspect-square rounded-full border-4 ">
           <img
             src={restaurant.imageUrl}
             alt="logo"
             className="w-full h-full object-cover rounded-full"
           />
         </div>
-        <h1 className="text-primary font-caveat font-bold sm:text-lg">KFC</h1>
-        <h1 className="text-primary font-caveat font-bold sm:text-lg">
+        <h1 className="text-secondary font-bold text-sm md:text-lg lg:text-lg xl:text-lg">
+          KFC
+        </h1>
+        <h1 className="text-secondary font-bold text-sm md:text-lg lg:text-lg xl:text-lg">
           {restaurant.vendorDetails.location}
         </h1>
-        <h1 className="text-secondary  font-bold sm:text-lg">
+        <h1 className="text-primary font-bold text-sm md:text-lg lg:text-lg xl:text-lg line-clamp-3">
           {restaurant.description}
         </h1>
       </div>
-      <div className="h-[70%] w-full flex flex-col gap-3 mt-12 p-2">
+      <div className="w-full flex flex-col gap-3 p-2">
         <div className="flex items-center gap-2">
           {state === true && (
             <IoArrowBackCircle

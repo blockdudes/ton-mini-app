@@ -8,12 +8,14 @@ import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import { useMemo } from "react";
 import { Badge } from "@material-tailwind/react";
 import { CartProvider, useCart } from "./hooks/useCart";
+import OrderPlaced from "./pages/OrderPlaced";
+import RecentOrders from "./pages/RecentOrders";
 
 const CartFloatingButton = () => {
   const { cart } = useCart();
   return (
     <>
-      <div className="fixed bottom-2 right-2">
+      <div className="absolute bottom-2 right-2">
         <Badge
           overlap="circular"
           className="m-[1px]"
@@ -22,10 +24,10 @@ const CartFloatingButton = () => {
           invisible={cart.items.length === 0}
         >
           <Link
-            className="w-12 h-12 bg-primary rounded-full border-4 flex justify-center items-center"
+            className="w-16 aspect-square bg-primary rounded-full border-4 flex justify-center items-center"
             to="/cart"
           >
-            <FaCartArrowDown color="white" />
+            <FaCartArrowDown color="white" size={20} />
           </Link>
         </Badge>
       </div>
@@ -42,16 +44,16 @@ const App = () => {
   console.log(manifestUrl);
 
   return (
-    <TonConnectUIProvider
-      manifestUrl={manifestUrl}
-      actionsConfiguration={{
-        twaReturnUrl:
-          "https://a164-2401-4900-1cd6-75f3-4c7d-2a8f-1ab2-c285.ngrok-free.app",
-      }}
-    >
-      <CartProvider>
-        <BrowserRouter>
-          <div className="bg-tertiary px-2 min-h-screen">
+    <div className="bg-tertiary px-2 font-Roboto">
+      <TonConnectUIProvider
+        manifestUrl={manifestUrl}
+        actionsConfiguration={{
+          twaReturnUrl:
+            "https://a164-2401-4900-1cd6-75f3-4c7d-2a8f-1ab2-c285.ngrok-free.app",
+        }}
+      >
+        <CartProvider>
+          <BrowserRouter>
             <Routes>
               <Route path="/" element={<CartFloatingButton />}>
                 <Route index element={<HomePage />} />
@@ -59,11 +61,13 @@ const App = () => {
               </Route>
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/order-placed" element={<OrderPlaced />} />
+              <Route path="/recent-orders" element={<RecentOrders />} />
             </Routes>
-          </div>
-        </BrowserRouter>
-      </CartProvider>
-    </TonConnectUIProvider>
+          </BrowserRouter>
+        </CartProvider>
+      </TonConnectUIProvider>
+    </div>
   );
 };
 

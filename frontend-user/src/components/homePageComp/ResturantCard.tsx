@@ -5,7 +5,7 @@ const ResturantCard = (restaurant: Restaurant) => {
   const navigate = useNavigate();
   return (
     <div
-      className="w-32 h-32 shadow-xl border-4 rounded-md cursor-pointer"
+      className="aspect-square shadow-xl border-4 rounded-md cursor-pointer"
       onClick={() =>
         navigate(`/menu/${restaurant.restaurantId}`, { state: true })
       }

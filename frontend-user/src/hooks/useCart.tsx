@@ -8,6 +8,7 @@ import {
   TonFoodMiniApp,
   User,
 } from "../contracts/tact_TonFoodMiniApp";
+import { NavigateFunction } from "react-router-dom";
 
 export type FoodItem = MenuItem & {
   quantity: bigint;
@@ -28,7 +29,8 @@ export type CartContextType = {
   removeFromCart: (item: MenuItem) => void;
   createOrder: (
     foodMiniAppContract: OpenedContract<TonFoodMiniApp>,
-    sender: Sender
+    sender: Sender,
+    navigate: NavigateFunction
   ) => Promise<void>;
 };
 
@@ -129,7 +131,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
   const createOrder = async (
     foodMiniAppContract: OpenedContract<TonFoodMiniApp>,
-    sender: Sender
+    sender: Sender,
+    navigate: NavigateFunction
   ) => {
     let totalPrice = cart.items.reduce(
       (total, item) => total + item.price * item.quantity,
@@ -168,6 +171,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       category: cart.category,
     };
     console.log(order);
+
+    navigate("/order-placed");
 
     await foodMiniAppContract.send(
       sender,

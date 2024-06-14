@@ -3,8 +3,11 @@ import { TonConnectButton } from "@tonconnect/ui-react";
 import { useFoodMiniAppContract } from "../hooks/useFoodAppContract";
 import { useEffect, useState } from "react";
 import { Array_Restaurant } from "../contracts/tact_TonFoodMiniApp";
+import { FaHistory } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState<Array_Restaurant>();
   const { foodMiniAppContract } = useFoodMiniAppContract();
 
@@ -19,9 +22,15 @@ const HomePage = () => {
   }, [foodMiniAppContract]);
 
   return (
-    <>
-      <div className="w-full flex justify-center my-2">
+    <div className="h-screen w-full">
+      <div className="w-full flex justify-center py-2">
         <TonConnectButton />
+        <button
+          className="absolute right-4 top-4"
+          onClick={() => navigate("/recent-orders")}
+        >
+          <FaHistory size={25} />
+        </button>
       </div>
       <div className="flex flex-col items-center gap-4">
         <h1 className="text-primary text-xl mt-4 self-center font-bold">
@@ -33,7 +42,7 @@ const HomePage = () => {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -130,7 +130,7 @@ contract TonFoodMiniApp with Deployable {
         require(self.orders.get(restaurantId)!!.Map.get(orderId)!!.status != self.Status_Rejected,
             "Order has already been rejected"
         );
-        require(sender() == restaurantId,
+        require(sender() == restaurantId || (sender() == self.orders.get(restaurantId)!!.Map.get(orderId)!!.userDetails.walletAddress && status == self.Status_Cancelled),
             "Unauthorized"
         );
 
