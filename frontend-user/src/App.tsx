@@ -26,7 +26,7 @@ function App() {
       manifestUrl={manifestUrl}
       actionsConfiguration={{
         twaReturnUrl:
-          "https://755e-2401-4900-1cd6-75f3-852a-ff01-cc34-f5a1.ngrok-free.app",
+          "https://216a-2401-4900-1cd6-75f3-6c18-44e9-2b2b-f73c.ngrok-free.app",
       }}
     >
       <BrowserRouter>
