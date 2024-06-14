@@ -5,10 +5,7 @@ module.exports = withMT({
   theme: {
     extend: {
       fontFamily: {
-        pacifico: ["Pacifico", "cursive"],
-        nunito: ["Nunito", "sans-serif"],
-        comfortaa: ["Comfortaa", "cursive"],
-        caveat: ["Caveat", "cursive"],
+        Roboto: ["Roboto", "sans-serif"],
       },
       colors: {
         primary: "#3d405b",

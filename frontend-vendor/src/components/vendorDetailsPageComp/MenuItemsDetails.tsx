@@ -16,7 +16,7 @@ import { useTonConnect } from "../../hooks/useTonConnect";
 import { useTonWallet } from "@tonconnect/ui-react";
 import { MenuItem } from "../../contract/tact_TonFoodMiniApp";
 
-const MenuItemsDetails = ({ addMenuItems }: any) => {
+const MenuItemsDetails = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const { allMenuItems } = useContext(GlobalContext);
   const { sender } = useTonConnect();
@@ -24,23 +24,6 @@ const MenuItemsDetails = ({ addMenuItems }: any) => {
   const { foodMiniAppContract }: any = useFoodMiniAppContract();
   const TABLE_HEAD = ["Name ", "Description ", "Price", ""];
 
-  const TABLE_ROWS = [
-    {
-      name: "Burger",
-      description: "Wed 5:00pm",
-      price: "$1,000",
-    },
-    {
-      name: "french Fries",
-      description: "Wed 5:00pm",
-      price: "$1,000",
-    },
-    {
-      name: "pizza",
-      description: "Wed 5:00pm",
-      price: "$1,000",
-    },
-  ];
   const handleDeleteItem = async (id: BigInt): Promise<void> => {
     await foodMiniAppContract.send(
       sender,
@@ -67,11 +50,7 @@ const MenuItemsDetails = ({ addMenuItems }: any) => {
       onPointerEnterCapture={undefined}
       onPointerLeaveCapture={undefined}
     >
-      <AddFoodItemModal
-        openModal={openModal}
-        setOpenModal={setOpenModal}
-        addMenuItems={addMenuItems}
-      />
+      <AddFoodItemModal openModal={openModal} setOpenModal={setOpenModal} />
       <CardHeader
         floated={false}
         shadow={false}
@@ -80,7 +59,7 @@ const MenuItemsDetails = ({ addMenuItems }: any) => {
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       >
-        <h1 className="font-bold text-lg">Manage your Resturants Menu</h1>
+        <h1 className="font-bold text-sm">Manage your Resturants Menu</h1>
         <Tooltip content="Add Food Item">
           <button onClick={() => setOpenModal(!openModal)}>
             <IoAddCircle size={25} color="green" />
@@ -103,7 +82,7 @@ const MenuItemsDetails = ({ addMenuItems }: any) => {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-bold  text-lg font-caveat leading-none opacity-70"
+                    className="font-bold  text-xs leading-none opacity-70"
                     placeholder={undefined}
                     onPointerEnterCapture={undefined}
                     onPointerLeaveCapture={undefined}
@@ -134,7 +113,7 @@ const MenuItemsDetails = ({ addMenuItems }: any) => {
                         <Typography
                           variant="small"
                           color="blue-gray"
-                          className="font-bold font-caveat"
+                          className="font-bold text-xs"
                           placeholder={undefined}
                           onPointerEnterCapture={undefined}
                           onPointerLeaveCapture={undefined}
@@ -147,7 +126,7 @@ const MenuItemsDetails = ({ addMenuItems }: any) => {
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-semibold font-caveat"
+                        className="font-semibold text-xs"
                         placeholder={undefined}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
@@ -159,7 +138,7 @@ const MenuItemsDetails = ({ addMenuItems }: any) => {
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-semibold font-coveat"
+                        className="font-semibold font-coveat text-xs"
                         placeholder={undefined}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}

@@ -14,7 +14,7 @@ export function useFoodMiniAppContract() {
       return;
     }
     const contract = TonFoodMiniApp.fromAddress(
-        Address.parse('EQAlBM85xkcm5xpT3ezun8Hoj2NURW2Y7Ec5FbEFjKGK7ip8')
+        Address.parse('EQAGNqYUM5Bj4rkhqlZfy4gCkxtT6QVJRI5hIUfecXt6b_HP')
     )
     return client.open(contract) as OpenedContract<TonFoodMiniApp>;
   }, [client]);

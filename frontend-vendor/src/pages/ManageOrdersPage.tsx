@@ -1,9 +1,9 @@
-import { Option, Select } from "@material-tailwind/react";
+import { Option, Select, Spinner } from "@material-tailwind/react";
 import { Address, fromNano, toNano } from "@ton/core";
 import { useTonWallet } from "@tonconnect/ui-react";
 import { useContext, useEffect, useState } from "react";
 import { IoArrowBackCircle } from "react-icons/io5";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { GlobalContext } from "../context/Store";
 import {
   formatUnixTimestamp,
@@ -17,8 +17,10 @@ const status = ["InQueue", "Accepted", "Delivered", "Cancelled", "Rejected"];
 
 const ManageOrdersPage = () => {
   const { orderId } = useParams();
-  const [updatedStatus, setUpdatedStatus] = useState("InQueue");
+  const [updatedStatus, setUpdatedStatus] = useState<any>("InQueue");
+  const [matchedOrders, setMatchedOrders] = useState<any>([]);
   const Wallet = useTonWallet();
+  const naviagte = useNavigate();
   const { sender } = useTonConnect();
   const {
     orderBasedOnId,
@@ -77,6 +79,7 @@ const ManageOrdersPage = () => {
         orderId: id,
       }
     );
+    naviagte("/");
   };
 
   const deliverOrder = async (id: BigInt) => {
@@ -92,6 +95,7 @@ const ManageOrdersPage = () => {
         orderId: id,
       }
     );
+    naviagte("/");
   };
 
   const cancelOrder = async (id: BigInt) => {
@@ -107,6 +111,7 @@ const ManageOrdersPage = () => {
         orderId: id,
       }
     );
+    naviagte("/");
   };
 
   const rejectOrder = async (id: BigInt) => {
@@ -122,6 +127,7 @@ const ManageOrdersPage = () => {
         orderId: id,
       }
     );
+    naviagte("/");
   };
 
   useEffect(() => {
@@ -148,29 +154,49 @@ const ManageOrdersPage = () => {
     }
   }, [updatedStatus]);
 
+  useEffect(() => {
+    if (orderBasedOnId) {
+      filterOrdersFromAllMenuItems();
+    }
+  }, [orderBasedOnId]);
+
   const filterOrdersFromAllMenuItems = () => {
     console.log("allMenuItems", allMenuItems);
-    console.log("orderBasedOnId", orderBasedOnId);
+    console.log("orderBasedOnId", orderBasedOnId.items.Map.values());
 
     //filter object from allMenuItems based on all OrderIds that is present in orderBasedOnId array of object
-
-    const filteredMenuItems = allMenuItems.filter((item) => {
-      console.log("item", item);
-      return orderBasedOnId.items.Map.values()?.includes(item.id);
-    });
-    console.log("filteredMenuItems", filteredMenuItems);
-    return filteredMenuItems;
+    const matchedOrders = orderBasedOnId?.items.Map.values()?.map(
+      (item: any) => {
+        const menuItem = allMenuItems?.find(
+          (menuItem: any) => menuItem.id == item.id
+        );
+        console.log(menuItem);
+        return menuItem
+          ? {
+              ...item,
+              name: menuItem.name,
+              price: menuItem.price,
+              isDeleted: menuItem.isDeleted,
+            }
+          : item;
+      }
+    );
+    console.log("matchedOrders", matchedOrders);
+    setMatchedOrders(matchedOrders);
   };
 
   if (!orderBasedOnId || orderBasedOnId === undefined)
     return (
       <div className="h-screen w-full flex flex-col justify-center items-center">
-        Loading...
+        <Spinner
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        />
       </div>
     );
 
   return (
-    <div className="pt-4 flex flex-col gap-4 px-2">
+    <div className="pt-4 flex flex-col gap-4 px-2 text-xs">
       <div className="flex items-center gap-2">
         <IoArrowBackCircle
           size={26}
@@ -216,17 +242,16 @@ const ManageOrdersPage = () => {
         </div> */}
       </div>
       <div className=" p-2 rounded-md border-4">
-        <div className="flex  font-bold justify-between">
-          {filterOrdersFromAllMenuItems()}
-          <h1>
-            <span>x 1</span>
-          </h1>
-          <h1>₹200</h1>
-        </div>
-        <div className="flex  font-bold justify-between">
-          <h1>Free Delivery</h1>
-          <h1>₹0</h1>
-        </div>
+        {matchedOrders?.map((order: any) => (
+          <div className="flex  font-bold justify-between">
+            <h1>
+              {order?.name}
+              <span> x {Number(order.quantity)}</span>
+            </h1>
+            <h1>{Number(fromNano(order.price)) * Number(order.quantity)}</h1>
+          </div>
+        ))}
+
         <div className="flex  font-bold justify-between">
           <h1>Total</h1>
           <h1>{fromNano(orderBasedOnId?.billingDetails.totalAmount)}</h1>
@@ -237,14 +262,13 @@ const ManageOrdersPage = () => {
         <Select
           label="Order Status"
           value={getStatus(orderBasedOnId?.status)}
-          className="font-caveat"
           onChange={(value) => setUpdatedStatus(value)}
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         >
           {status?.map((status, index) => (
-            <Option key={index} value={status}>
+            <Option className="bg-tertiary mb-2" key={index} value={status}>
               {status}
             </Option>
           ))}
