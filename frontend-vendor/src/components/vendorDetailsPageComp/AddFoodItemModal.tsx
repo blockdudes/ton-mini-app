@@ -10,13 +10,9 @@ import {
 import { GlobalContext } from "../../context/Store";
 import { useContext } from "react";
 
-export function AddFoodItemModal({
-  openModal,
-  setOpenModal,
-  addMenuItems,
-}: any) {
+export function AddFoodItemModal({ openModal, setOpenModal }: any) {
   const handleOpen = () => setOpenModal(!openModal);
-  const { menuItem, setMenuItem } = useContext(GlobalContext);
+  const { menuItem, setMenuItem, addMenuItems } = useContext(GlobalContext);
 
   return (
     <>
@@ -30,7 +26,7 @@ export function AddFoodItemModal({
         onPointerLeaveCapture={undefined}
       >
         <DialogHeader
-          className="text-primary font-bold text-lg border-b-4 shadow-lg  font-caveat "
+          className="text-primary font-bold text-sm border-b-4 shadow-lg  "
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
@@ -44,12 +40,10 @@ export function AddFoodItemModal({
           onPointerLeaveCapture={undefined}
         >
           <div className="flex flex-col gap-4">
-            <h1 className="text-primary font-medium font-caveat">
-              Your Food Name
-            </h1>
+            <h1 className="text-primary text-xs font-medium">Your Food Name</h1>
             <Input
               value={menuItem.name}
-              labelProps={{ className: "text-primary font-caveat" }}
+              labelProps={{ className: "text-primary" }}
               label="Name"
               size="lg"
               onChange={(e) =>
@@ -61,12 +55,12 @@ export function AddFoodItemModal({
             />
           </div>
           <div className="flex flex-col gap-4">
-            <h1 className="text-primary font-caveat font-medium">
+            <h1 className="text-primary text-xs font-medium">
               Your Food Image Url
             </h1>
             <Input
               value={menuItem.imageUrl}
-              labelProps={{ className: "text-primary font-caveat" }}
+              labelProps={{ className: "text-primary" }}
               label="image url"
               size="lg"
               onChange={(e) =>
@@ -78,12 +72,12 @@ export function AddFoodItemModal({
             />
           </div>
           <div className="flex flex-col gap-4">
-            <h1 className="text-primary font-medium font-caveat">
-              Your Resturant Description
+            <h1 className="text-primary text-xs font-medium">
+              Your food Description
             </h1>
 
             <Textarea
-              labelProps={{ className: "text-primary font-caveat" }}
+              labelProps={{ className: "text-primary" }}
               value={menuItem.description}
               label="description"
               size="lg"
@@ -95,11 +89,11 @@ export function AddFoodItemModal({
             />
           </div>
           <div className="flex flex-col gap-4">
-            <h1 className="text-primary font-caveat font-medium">
+            <h1 className="text-primary font-medium text-xs">
               Your Food Price
             </h1>
             <Input
-              labelProps={{ className: "text-primary font-caveat" }}
+              labelProps={{ className: "text-primary" }}
               label="price"
               size="lg"
               onChange={(e) =>
@@ -126,18 +120,27 @@ export function AddFoodItemModal({
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
           >
-            <span className="font-caveat">Cancel</span>
+            <span>Cancel</span>
           </Button>
           <Button
+            disabled={
+              menuItem.name === "" ||
+              menuItem.imageUrl === "" ||
+              menuItem.description === "" ||
+              menuItem.price === ""
+            }
             variant="gradient"
             size="sm"
             color="green"
-            onClick={() => addMenuItems()}
+            onClick={() => {
+              addMenuItems();
+              setOpenModal(false);
+            }}
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
           >
-            <span className="font-caveat">Confirm</span>
+            <span>Confirm</span>
           </Button>
         </DialogFooter>
       </Dialog>

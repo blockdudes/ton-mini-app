@@ -1,28 +1,32 @@
 import React, { useContext, useEffect } from "react";
 import { AllOrdersTable } from "../components/vendorDetailsPageComp/AllOrdersTable";
-import { Tab, Tabs, TabsHeader } from "@material-tailwind/react";
+import { Spinner, Tab, Tabs, TabsHeader } from "@material-tailwind/react";
 import MenuItemsDetails from "../components/vendorDetailsPageComp/MenuItemsDetails";
 import EditProfile from "../components/vendorDetailsPageComp/EditProfile";
 import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
 import { Address } from "@ton/core";
 import { useFoodMiniAppContract } from "../hooks/useFoodMiniAppContract";
 import { GlobalContext } from "../context/Store";
+import { FaInfoCircle } from "react-icons/fa";
+import { InfoModal } from "../components/vendorDetailsPageComp/InfoModal";
 
-const VendorDetailsPage = ({ addMenuItems }: any) => {
+const VendorDetailsPage = () => {
   const [activeTab, setActiveTab] = React.useState("manageOrders");
+  const [openModal, setOpenModal] = React.useState(false);
   const Wallet = useTonWallet();
   const { foodMiniAppContract } = useFoodMiniAppContract();
   const { setAllOrders, setAllMenuItems, setResturantById, resturantById } =
     useContext(GlobalContext);
 
+  const getAllOrders = async () => {
+    const walletAddress = Address.parse(Wallet!.account.address);
+    console.log(walletAddress);
+    const res = await foodMiniAppContract?.getAllOrders(walletAddress);
+    setAllOrders(res?.Map.values());
+  };
+
   useEffect(() => {
     if (Wallet !== null) {
-      const getAllOrders = async () => {
-        const walletAddress = Address.parse(Wallet!.account.address);
-        console.log(walletAddress);
-        const res = await foodMiniAppContract?.getAllOrders(walletAddress);
-        setAllOrders(res?.Map.values());
-      };
       getAllOrders();
     }
   }, [foodMiniAppContract, activeTab]);
@@ -51,11 +55,24 @@ const VendorDetailsPage = ({ addMenuItems }: any) => {
       value: "editProfile",
     },
   ];
-  if (!resturantById) return <div>Loading...</div>;
+  if (!resturantById)
+    return (
+      <div className="flex min-h-screen justify-center items-center">
+        <Spinner
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        />
+      </div>
+    );
   return (
-    <div className="flex flex-col pt-2">
-      <div className="self-end p-2">
+    <div className="flex w-full flex-col pt-2">
+      <InfoModal openModal={openModal} setOpenModal={setOpenModal} />
+      <div className=" w-full flex justify-between">
         <TonConnectButton />
+        <FaInfoCircle
+          className="cursor-pointer"
+          onClick={() => setOpenModal(!openModal)}
+        />
       </div>
       {/* resturant info */}
       <div className="h-[30%] items-center flex flex-col">
@@ -65,7 +82,7 @@ const VendorDetailsPage = ({ addMenuItems }: any) => {
             className="w-full h-full object-cover rounded-full"
           />
         </div>
-        <h1 className="text-primary  font-caveat font-bold sm:text-lg">
+        <h1 className="text-primary  font-bold sm:text-lg">
           {resturantById[0]?.name}
         </h1>
 
@@ -85,7 +102,7 @@ const VendorDetailsPage = ({ addMenuItems }: any) => {
             {data.map(({ label, value }) => (
               <Tab
                 onClick={() => setActiveTab(value)}
-                className="font-caveat font-bold"
+                className="font-bold text-xs"
                 key={value}
                 value={value}
                 placeholder={undefined}
@@ -104,7 +121,7 @@ const VendorDetailsPage = ({ addMenuItems }: any) => {
         )}
         {activeTab === "menuItems" && (
           <div className="flex items-center gap-2">
-            <MenuItemsDetails addMenuItems={addMenuItems} />
+            <MenuItemsDetails />
           </div>
         )}
         {activeTab === "editProfile" && (

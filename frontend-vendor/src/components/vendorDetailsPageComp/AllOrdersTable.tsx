@@ -65,7 +65,7 @@ export function AllOrdersTable() {
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       >
-        <h1 className="font-bold text-lg">Manage your Orders</h1>
+        <h1 className="font-bold text-sm">Manage your Orders</h1>
       </CardHeader>
       <CardBody
         className="overflow-scroll  px-0"
@@ -83,7 +83,7 @@ export function AllOrdersTable() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-bold text-lg  font-caveat leading-none opacity-70"
+                    className="font-bold text-sm  leading-none opacity-70"
                     placeholder={undefined}
                     onPointerEnterCapture={undefined}
                     onPointerLeaveCapture={undefined}
@@ -112,7 +112,7 @@ export function AllOrdersTable() {
                         <Typography
                           variant="small"
                           color="blue-gray"
-                          className="font-bold font-caveat"
+                          className="font-bold text-xs"
                           placeholder={undefined}
                           onPointerEnterCapture={undefined}
                           onPointerLeaveCapture={undefined}
@@ -125,7 +125,7 @@ export function AllOrdersTable() {
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-semibold font-caveat"
+                        className="font-semibold text-xs"
                         placeholder={undefined}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
@@ -143,10 +143,10 @@ export function AllOrdersTable() {
                     </Typography>
                   </td> */}
                     <td className={classes}>
-                      <div className="w-max">
+                      <div className="w-max text-xs">
                         <Chip
-                          className="font-caveat"
                           size="sm"
+                          className="text-xs"
                           variant="ghost"
                           value={getStatus(status)}
                         />
