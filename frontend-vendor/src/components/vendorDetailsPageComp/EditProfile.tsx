@@ -6,11 +6,11 @@ import { EditProfileModal } from "./EditProfileModal";
 const EditProfile = () => {
   const { resturantById } = useContext(GlobalContext);
   const [openModal, setOpenModal] = useState(false);
-  console.log("resturantById", resturantById);
+
   return (
     <div className="w-full ">
       <EditProfileModal openModal={openModal} setOpenModal={setOpenModal} />
-      <div className=" flex flex-col gap-4 p-2 rounded-md border-4 text-sm">
+      <div className=" flex flex-col gap-4 p-2 rounded-md border-4 text-xs">
         <div className="flex  gap-2">
           <h1 className="text-primary font-bold">Name:</h1>
           <h1 className="text-primary">

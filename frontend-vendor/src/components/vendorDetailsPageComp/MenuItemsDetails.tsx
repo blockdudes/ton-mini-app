@@ -7,7 +7,7 @@ import {
   Tooltip,
 } from "@material-tailwind/react";
 import { MdDeleteOutline } from "react-icons/md";
-import { IoAddCircle } from "react-icons/io5";
+import { IoAddCircle, IoReload } from "react-icons/io5";
 import { AddFoodItemModal } from "./AddFoodItemModal";
 import { GlobalContext } from "../../context/Store";
 import { Address, Dictionary, fromNano, toNano } from "@ton/core";
@@ -22,7 +22,7 @@ const MenuItemsDetails = () => {
   const { sender } = useTonConnect();
   const Wallet = useTonWallet();
   const { foodMiniAppContract }: any = useFoodMiniAppContract();
-  const TABLE_HEAD = ["Name ", "Description ", "Price", ""];
+  const TABLE_HEAD = ["Name ", "Description ", "Price (TON)", ""];
 
   const handleDeleteItem = async (id: BigInt): Promise<void> => {
     await foodMiniAppContract.send(
@@ -42,7 +42,6 @@ const MenuItemsDetails = () => {
     );
   };
 
-  console.log("allMenuItems", allMenuItems);
   return (
     <Card
       className="h-full w-full"
@@ -59,12 +58,16 @@ const MenuItemsDetails = () => {
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       >
-        <h1 className="font-bold text-sm">Manage your Resturants Menu</h1>
+        <h1 className="font-bold text-xs">Manage your Resturants Menu</h1>
         <Tooltip content="Add Food Item">
           <button onClick={() => setOpenModal(!openModal)}>
             <IoAddCircle size={25} color="green" />
           </button>
         </Tooltip>
+        <IoReload
+          className="cursor-pointer"
+          onClick={() => window.location.reload()}
+        />
       </CardHeader>
       <CardBody
         className="overflow-scroll  px-0"
@@ -104,10 +107,7 @@ const MenuItemsDetails = () => {
                   ? "p-4"
                   : "p-4 border-b border-blue-gray-50 ";
                 return (
-                  <tr
-                    key={name}
-                    className={`cursor-pointer ${isDeleted && "hidden"}`}
-                  >
+                  <tr key={index} className={` ${isDeleted && "hidden"}`}>
                     <td className={classes}>
                       <div className="flex items-center gap-3">
                         <Typography
@@ -147,7 +147,7 @@ const MenuItemsDetails = () => {
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <div className="w-max">
+                      <div className="w-max cursor-pointer">
                         <MdDeleteOutline onClick={() => handleDeleteItem(id)} />
                       </div>
                     </td>

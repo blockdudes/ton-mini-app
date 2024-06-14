@@ -94,7 +94,7 @@ export function AddFoodItemModal({ openModal, setOpenModal }: any) {
             </h1>
             <Input
               labelProps={{ className: "text-primary" }}
-              label="price"
+              label="price in ton"
               size="lg"
               onChange={(e) =>
                 setMenuItem({ ...menuItem, price: e.target.value })

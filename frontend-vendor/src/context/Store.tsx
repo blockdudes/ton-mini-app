@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useFoodMiniAppContract } from "../hooks/useFoodMiniAppContract";
 import { useTonConnect } from "../hooks/useTonConnect";
 import { Address, Dictionary, toNano } from "@ton/core";
@@ -49,11 +49,11 @@ const GlobalStateProvider = ({ children }: any) => {
     vendorLocation: "",
   });
   const [resturantById, setResturantById] = useState({});
-  console.log("foodMiniAppContract", foodMiniAppContract);
+  const [isVendor, setIsVendor] = useState<boolean>();
 
   const createResturant = async () => {
     if (!foodMiniAppContract) return;
-    const res = await foodMiniAppContract.send(
+    await foodMiniAppContract.send(
       sender,
       {
         value: toNano(0.5),
@@ -85,8 +85,6 @@ const GlobalStateProvider = ({ children }: any) => {
       } as CreateRestaurant
     );
     navigate("/");
-
-    console.log(res);
   };
 
   const addMenuItems = async () => {
@@ -139,6 +137,18 @@ const GlobalStateProvider = ({ children }: any) => {
     );
     navigate("/");
   };
+
+  useEffect(() => {
+    const getIsVendor = async () => {
+      const res = await foodMiniAppContract?.getIsVendorPresent(
+        Address.parse(Wallet!.account.address)
+      );
+      setIsVendor(res || false);
+    };
+
+    getIsVendor();
+  }, [foodMiniAppContract, Wallet]);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -160,6 +170,7 @@ const GlobalStateProvider = ({ children }: any) => {
         newProfileDetails,
         setNewProfileDetails,
         updateProfile,
+        isVendor,
       }}
     >
       {children}

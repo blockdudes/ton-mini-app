@@ -4,6 +4,8 @@ import { useTonClient } from "./useTonClient";
 import { useAsyncInitialize } from './useAsyncInitialize';
 import { Address, OpenedContract } from '@ton/core';
 
+const CONTRACT_ADDRESS = 'EQDvDTXfqYCWDsmJKBkT8Ufar0oDSFNAUgioT7RcppFXaS91';
+
 export function useFoodMiniAppContract() {
   const client = useTonClient();
   
@@ -14,7 +16,7 @@ export function useFoodMiniAppContract() {
       return;
     }
     const contract = TonFoodMiniApp.fromAddress(
-        Address.parse('EQAGNqYUM5Bj4rkhqlZfy4gCkxtT6QVJRI5hIUfecXt6b_HP')
+        Address.parse(CONTRACT_ADDRESS)
     )
     return client.open(contract) as OpenedContract<TonFoodMiniApp>;
   }, [client]);

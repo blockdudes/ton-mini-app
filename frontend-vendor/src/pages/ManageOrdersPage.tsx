@@ -29,41 +29,29 @@ const ManageOrdersPage = () => {
     allMenuItems,
     setAllMenuItems,
   } = useContext(GlobalContext);
-  console.log("wallet address", Wallet);
-  console.log("foodMiniAppContract", foodMiniAppContract);
-  console.log("orderId", orderId);
 
   useEffect(() => {
-    console.log("Inside useEffect", orderId);
     const getOrderBasedOnOrderId = async () => {
       if (!foodMiniAppContract) {
-        console.log("no foodMiniAppContract");
         return;
       }
       if (!orderId) {
-        console.log("no orderId");
         return;
       }
       if (!Wallet) {
-        console.log("no Wallet");
         return;
       }
       const walletAddress = Address.parse(Wallet!.account.address);
-      console.log("wallet", walletAddress);
+
       const res = await foodMiniAppContract?.getAllOrders(walletAddress);
-      console.log("allOrders--->", res?.Map.values());
+
       const foundOrder = res?.Map.values().find(
         (order: Order) => order.orderId == BigInt(orderId)
       );
       setOrderBasedOnId(foundOrder);
-      console.log("foundOrder", foundOrder);
     };
     getOrderBasedOnOrderId();
   }, [foodMiniAppContract, Wallet, orderId]);
-
-  console.log("orderBasedOnId", orderBasedOnId);
-  console.log("updatedStatus", updatedStatus);
-  console.log("allMenuItems", allMenuItems);
 
   const acceptOrder = async (id: BigInt) => {
     if (!foodMiniAppContract) return;
@@ -161,16 +149,13 @@ const ManageOrdersPage = () => {
   }, [orderBasedOnId]);
 
   const filterOrdersFromAllMenuItems = () => {
-    console.log("allMenuItems", allMenuItems);
-    console.log("orderBasedOnId", orderBasedOnId.items.Map.values());
-
     //filter object from allMenuItems based on all OrderIds that is present in orderBasedOnId array of object
     const matchedOrders = orderBasedOnId?.items.Map.values()?.map(
       (item: any) => {
         const menuItem = allMenuItems?.find(
           (menuItem: any) => menuItem.id == item.id
         );
-        console.log(menuItem);
+
         return menuItem
           ? {
               ...item,
@@ -181,7 +166,7 @@ const ManageOrdersPage = () => {
           : item;
       }
     );
-    console.log("matchedOrders", matchedOrders);
+
     setMatchedOrders(matchedOrders);
   };
 
@@ -248,13 +233,15 @@ const ManageOrdersPage = () => {
               {order?.name}
               <span> x {Number(order.quantity)}</span>
             </h1>
-            <h1>{Number(fromNano(order.price)) * Number(order.quantity)}</h1>
+            <h1>
+              {Number(fromNano(order.price)) * Number(order.quantity)} ton
+            </h1>
           </div>
         ))}
 
         <div className="flex  font-bold justify-between">
           <h1>Total</h1>
-          <h1>{fromNano(orderBasedOnId?.billingDetails.totalAmount)}</h1>
+          <h1>{fromNano(orderBasedOnId?.billingDetails.totalAmount)} ton</h1>
         </div>
       </div>
       <div className=" p-2 flex flex-col gap-4 rounded-md border-4">

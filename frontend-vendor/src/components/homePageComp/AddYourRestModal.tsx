@@ -14,9 +14,6 @@ export function AddYourRestModal({ openModal, setOpenModal }: any) {
   const { resturantDetails, setResturantDetails, createResturant } =
     React.useContext(GlobalContext);
 
-  console.log("resturantDetails", resturantDetails);
-  console.log("openModal", openModal);
-
   const addResturant = () => {
     createResturant();
     setOpenModal(false);
@@ -90,12 +87,7 @@ export function AddYourRestModal({ openModal, setOpenModal }: any) {
             <h1 className="text-primary font-medium text-xs">
               Your Resturant Description
             </h1>
-            {/* <Input
-              labelProps={{ className: "text-primary" }}
-              label="Name"
-              size="lg"
-              onChange={(e) => console.log(e.target.value)}
-            /> */}
+
             <Textarea
               labelProps={{ className: "text-primary" }}
               value={resturantDetails.resturantDescription}
@@ -215,7 +207,7 @@ export function AddYourRestModal({ openModal, setOpenModal }: any) {
               <Input
                 labelProps={{ className: "text-primary" }}
                 value={resturantDetails.menuPrice}
-                label="price"
+                label="price in ton"
                 size="lg"
                 onChange={(e) =>
                   setResturantDetails({

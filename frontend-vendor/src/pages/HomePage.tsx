@@ -1,36 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 import VendorDetailsPage from "./VendorDetailsPage";
 import { AddYourRestModal } from "../components/homePageComp/AddYourRestModal";
 import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
-import { useFoodMiniAppContract } from "../hooks/useFoodMiniAppContract";
-
-import { Address } from "@ton/core";
+import { IoReload } from "react-icons/io5";
+import { GlobalContext } from "../context/Store";
 
 // import { GlobalContext } from "../context/Store";
 
 const HomePage = () => {
-  const [isVendor, setIsVendor] = React.useState<boolean>();
   const [openModal, setOpenModal] = React.useState(false);
-  const { foodMiniAppContract } = useFoodMiniAppContract();
+  const { isVendor } = useContext(GlobalContext);
 
   const Wallet = useTonWallet();
-  console.log(Wallet);
-  console.log(foodMiniAppContract);
-
-  useEffect(() => {
-    if (Wallet !== null) {
-      const getIsVendor = async () => {
-        const res = await foodMiniAppContract?.getIsVendorPresent(
-          Address.parse(Wallet!.account.address)
-        );
-        setIsVendor(res || false);
-        console.log(res);
-      };
-
-      getIsVendor();
-    }
-  }, [foodMiniAppContract]);
 
   return (
     <>
@@ -44,9 +26,10 @@ const HomePage = () => {
               setOpenModal={setOpenModal}
             />
             <div
-              className="flex min-h-screen justify-center items-center cursor-pointer"
+              className={` flex flex-col gap-2 min-h-screen justify-center items-center cursor-pointer`}
               onClick={() => setOpenModal(!openModal)}
             >
+              <IoReload onClick={() => window.location.reload()} />
               <div className="w-32 h-32 border-4 flex flex-col justify-center items-center  shadow-lg rounded-md">
                 <IoIosAddCircle
                   size={30}

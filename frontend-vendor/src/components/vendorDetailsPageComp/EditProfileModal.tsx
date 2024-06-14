@@ -13,7 +13,6 @@ export function EditProfileModal({ openModal, setOpenModal }: any) {
   const handleOpen = () => setOpenModal(!openModal);
   const { newProfileDetails, setNewProfileDetails, updateProfile } =
     useContext(GlobalContext);
-  console.log("newProfileDetails", newProfileDetails);
 
   return (
     <>

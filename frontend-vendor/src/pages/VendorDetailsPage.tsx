@@ -20,7 +20,7 @@ const VendorDetailsPage = () => {
 
   const getAllOrders = async () => {
     const walletAddress = Address.parse(Wallet!.account.address);
-    console.log(walletAddress);
+
     const res = await foodMiniAppContract?.getAllOrders(walletAddress);
     setAllOrders(res?.Map.values());
   };
@@ -67,7 +67,7 @@ const VendorDetailsPage = () => {
   return (
     <div className="flex w-full flex-col pt-2">
       <InfoModal openModal={openModal} setOpenModal={setOpenModal} />
-      <div className=" w-full flex justify-between">
+      <div className=" w-full flex items-center justify-evenly mt-2">
         <TonConnectButton />
         <FaInfoCircle
           className="cursor-pointer"
@@ -75,7 +75,7 @@ const VendorDetailsPage = () => {
         />
       </div>
       {/* resturant info */}
-      <div className="h-[30%] items-center flex flex-col">
+      <div className="h-[30%] items-center mt-6 flex flex-col">
         <div className="w-20 h-20 sm:w-24 sm:h-24  rounded-full border-4 ">
           <img
             src={resturantById[0]?.imageUrl}

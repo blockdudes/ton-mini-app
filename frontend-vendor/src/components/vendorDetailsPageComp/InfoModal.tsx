@@ -5,9 +5,11 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useTonWallet } from "@tonconnect/ui-react";
 
 export function InfoModal({ openModal, setOpenModal }: any) {
   const handleOpen = () => setOpenModal(!openModal);
+  const wallet = useTonWallet();
 
   return (
     <>
@@ -29,7 +31,7 @@ export function InfoModal({ openModal, setOpenModal }: any) {
           Steps to create your Resturant bot
         </DialogHeader>
         <DialogBody
-          className="h-[250px] text-primary flex flex-col gap-3 overflow-scroll"
+          className="h-[260px] text-primary flex flex-col gap-3 overflow-scroll"
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
@@ -57,8 +59,9 @@ export function InfoModal({ openModal, setOpenModal }: any) {
             <li>Click on Configure Menu Button.</li>
           </p>
           <p className="text-xs">5. Send URL:</p>
-          <p className="text-xs ml-2">
+          <p className="text-xs ml-2 ">
             <li>Enter your mini app URL when prompted.</li>
+            <p className="bg-white px-1 py-2 mt-2 rounded-md overflow-scroll line-clamp-3">{`https://frontend-tele.netlify.app/menu/${wallet?.account.address.toString()}`}</p>
           </p>
         </DialogBody>
         <DialogFooter
