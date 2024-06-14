@@ -8,7 +8,6 @@ import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import { useMemo } from "react";
 import { Badge } from "@material-tailwind/react";
 import { CartProvider, useCart } from "./hooks/useCart";
-import OrderPlaced from "./pages/OrderPlaced";
 import RecentOrders from "./pages/RecentOrders";
 
 const CartFloatingButton = () => {
@@ -48,8 +47,7 @@ const App = () => {
       <TonConnectUIProvider
         manifestUrl={manifestUrl}
         actionsConfiguration={{
-          twaReturnUrl:
-            "https://a164-2401-4900-1cd6-75f3-4c7d-2a8f-1ab2-c285.ngrok-free.app",
+          twaReturnUrl: "https://frontend-tele.netlify.app/",
         }}
       >
         <CartProvider>
@@ -61,8 +59,13 @@ const App = () => {
               </Route>
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/order-placed" element={<OrderPlaced />} />
-              <Route path="/recent-orders" element={<RecentOrders />} />
+              <Route path="/recent-orders">
+                <Route index element={<RecentOrders />} />
+                <Route
+                  path="/recent-orders/:restaurantId"
+                  element={<RecentOrders />}
+                />
+              </Route>
             </Routes>
           </BrowserRouter>
         </CartProvider>

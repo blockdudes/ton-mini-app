@@ -14,6 +14,7 @@ import { useTonConnect } from "../hooks/useTonConnect";
 
 const RecentOrders = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const resturantId = window.location.pathname.split("/recent-orders/")[1];
   const [restaurants, setRestaurants] = useState<Array_Restaurant>();
   const [clickedIndex, setClickedIndex] = useState<number>(-1);
   const [orders, setOrders] = useState<Array_Order>();
@@ -29,7 +30,20 @@ const RecentOrders = () => {
       const _orders = await foodMiniAppContract.getAllUserOrders(
         Address.parse(wallet.account.address)
       );
-      setOrders(_orders);
+      if (resturantId) {
+        const _restaurant = await foodMiniAppContract.getRestaurantById(
+          Address.parse(resturantId)
+        );
+        setRestaurants(_restaurant);
+        let _updatedOrders = _orders;
+        _updatedOrders.Map.values().filter((order) =>
+          order.restaurantId.equals(Address.parse(resturantId))
+        );
+        _updatedOrders.length = BigInt(_updatedOrders.Map.size);
+        setOrders(_orders);
+      }
+      const _restaurants = await foodMiniAppContract.getAllRestaurants();
+      setRestaurants(_restaurants);
     } catch (e) {
       setOrders({
         $$type: "Array_Order",
@@ -37,8 +51,7 @@ const RecentOrders = () => {
         length: 0n,
       } as Array_Order);
     }
-    const _restaurants = await foodMiniAppContract.getAllRestaurants();
-    setRestaurants(_restaurants);
+
     setIsLoading(false);
   };
 

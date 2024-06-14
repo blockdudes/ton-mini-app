@@ -172,7 +172,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     };
     console.log(order);
 
-    navigate("/order-placed");
+    navigate("/");
 
     await foodMiniAppContract.send(
       sender,

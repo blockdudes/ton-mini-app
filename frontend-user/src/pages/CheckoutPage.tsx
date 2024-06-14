@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
-  const { cart, createOrder, setUserInfo } = useCart();
+  const { cart, createOrder, setUserInfo, setCategory } = useCart();
   const { sender } = useTonConnect();
   const { foodMiniAppContract } = useFoodMiniAppContract();
   const wallet = useTonWallet();
@@ -90,7 +90,12 @@ const CheckoutPage = () => {
           </div>
         </div>
         <div className="p-2 rounded-md border-4">
-          <CheckoutDetails data={cart.userDetails} setData={setUserInfo} />
+          <CheckoutDetails
+            data={cart.userDetails}
+            setData={setUserInfo}
+            category={cart.category}
+            setCategory={setCategory}
+          />
         </div>
       </div>
       <button

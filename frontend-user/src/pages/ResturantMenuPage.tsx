@@ -4,9 +4,11 @@ import { IoArrowBackCircle } from "react-icons/io5";
 import { Restaurant } from "../contracts/tact_TonFoodMiniApp";
 import { useFoodMiniAppContract } from "../hooks/useFoodAppContract";
 import { Address } from "@ton/core";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FaHistory } from "react-icons/fa";
 
 const ResturantMenuPage = () => {
+  const navigate = useNavigate();
   const { state } = useLocation();
   const [restaurant, setRestaurant] = useState<Restaurant>();
   const resturantId = window.location.pathname.split("/menu/")[1];
@@ -51,15 +53,25 @@ const ResturantMenuPage = () => {
         </h1>
       </div>
       <div className="w-full flex flex-col gap-3 p-2">
-        <div className="flex items-center gap-2">
-          {state === true && (
-            <IoArrowBackCircle
-              size={26}
-              onClick={() => window.history.back()}
-              className="cursor-pointer"
-            />
+        <div className="w-full flex justify-between">
+          <div className="flex items-center gap-2">
+            {state === true && (
+              <IoArrowBackCircle
+                size={26}
+                onClick={() => window.history.back()}
+                className="cursor-pointer"
+              />
+            )}
+            <h1 className="text-primary text-xl font-bold">Explore our menu</h1>
+          </div>
+          {state !== true && (
+            <button
+              className="absolute right-4 top-4"
+              onClick={() => navigate(`/recent-orders/${resturantId}`)}
+            >
+              <FaHistory size={25} />
+            </button>
           )}
-          <h1 className="text-primary text-xl font-bold">Explore our menu</h1>
         </div>
         <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {restaurant.menu.Map.values().map((item, index) => (
