@@ -77,7 +77,7 @@ contract TonFoodMiniApp with Deployable {
         require(msg.userDetails.walletAddress == sender(), "Unauthorized");
         require(msg.userDetails.name != "", "User name cannot be empty");
         require(msg.userDetails.phoneNumber != "", "User phone number cannot be empty");
-        require(msg.userDetails.location != "", "User location cannot be empty");
+        require(msg.category == self.OrderCategory_Delivery && msg.userDetails.location != "", "User location cannot be empty");
         require(msg.billingDetails.totalAmount != 0, "Total amount cannot be 0");
         require(context().value >= msg.billingDetails.totalAmount,
             "Insufficient funds"

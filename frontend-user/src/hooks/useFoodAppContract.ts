@@ -9,7 +9,7 @@ export function useFoodMiniAppContract() {
   const foodMiniAppContract = useAsyncInitialize(async () => {
     if (!client) return;
     const contract = TonFoodMiniApp.fromAddress(
-      Address.parse("EQAGNqYUM5Bj4rkhqlZfy4gCkxtT6QVJRI5hIUfecXt6b_HP")
+      Address.parse("EQDvDTXfqYCWDsmJKBkT8Ufar0oDSFNAUgioT7RcppFXaS91")
     );
     const openedContract = client.open(
       contract
