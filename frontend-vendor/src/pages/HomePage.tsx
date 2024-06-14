@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 import VendorDetailsPage from "./VendorDetailsPage";
 import { AddYourRestModal } from "../components/homePageComp/AddYourRestModal";
@@ -7,16 +7,12 @@ import { useFoodMiniAppContract } from "../hooks/useFoodMiniAppContract";
 
 import { Address } from "@ton/core";
 
-import { GlobalContext } from "../context/Store";
-
 // import { GlobalContext } from "../context/Store";
 
 const HomePage = () => {
   const [isVendor, setIsVendor] = React.useState<boolean>();
   const [openModal, setOpenModal] = React.useState(false);
   const { foodMiniAppContract } = useFoodMiniAppContract();
-
-  const { menuItem } = useContext(GlobalContext);
 
   const Wallet = useTonWallet();
   console.log(Wallet);
