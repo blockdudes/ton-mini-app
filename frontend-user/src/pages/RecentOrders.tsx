@@ -6,7 +6,7 @@ import {
   CancelOrder,
   Order,
 } from "../contracts/tact_TonFoodMiniApp";
-import { TonConnectError, useTonWallet } from "@tonconnect/ui-react";
+import { useTonWallet } from "@tonconnect/ui-react";
 import { Address, Dictionary, fromNano, toNano } from "@ton/core";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { LuRefreshCw } from "react-icons/lu";
