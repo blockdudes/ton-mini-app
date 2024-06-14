@@ -12,7 +12,7 @@ const OrderPlaced = () => {
       </div>
       <h1 className="text-2xl font-bold">Order Placed</h1>
       <p className="mx-16 text-center">
-        Check transaction status from the connected wallet
+        You can check transaction status from the recent orders page
       </p>
       <Button
         className="w-1/2"

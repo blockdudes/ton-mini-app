@@ -180,14 +180,14 @@ struct User {
 struct Item {
     name: String;
     description: String;
-    price: Int as uint32;
+    price: Int as uint256;
     imageUrl: String;
 }
 struct MenuItem {
     id: Int as uint256;
     name: String;
     description: String;
-    price: Int as uint32;
+    price: Int as uint256;
     imageUrl: String;
     isDeleted: Bool;
 }
